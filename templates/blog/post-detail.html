@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load blog_extras %}
+{% block content %}
+<h2 class='text-center m-3'>{{ post.title }}</h2>
+{% row %}
+    <div class="col">
+        {% include "blog/post-byline.html" %}
+    </div>
+{% endrow %}
+{% row %}
+    <div class="col animate animate__lightSpeedInRight">
+        {{ post.content|safe }}
+    </div>
+{% endrow %}
+{% row 'mt-5'%}
+    {% col 'mb-2'%}
+        {% recent_posts post %}
+    {% endcol %}
+{% endrow %}
+
+{% endblock %}

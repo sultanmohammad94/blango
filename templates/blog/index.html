@@ -1,18 +1,24 @@
 {% extends "base.html" %}
 {% load blog_extras %}
 {% block content %}
-    <h2>Blog Posts</h2>
+    <h2 class="text-center text-warning display-2 mb-5 p-3 text-uppercase fw-bold">Blog Posts</h2>
+
     {% for post in posts %}
-    <div class="row">
-        <div class="col">
-            <h3>{{ post.title }}</h3>
-            <small>By {{ post.author|author_details:request.user }} on {{ post.published_at|date:"M, d Y" }}</small>
-            <p>{{ post.summary }}</p>
+    {% row  'border-bottom' %}
+        {% col 'p-2 bg-dark'%}
+          <div class="card p-3 bg-light text-dark border border-warning border-3">
+            <h3 class="display-3 mb-2 card-title text-Dark fw-bold text-center">{{ post.title }}</h3>
+            <div class="text-center">
+            {% include "blog/post-byline.html" %}
+        
+              <p class='card-text text-center'>{{ post.summary }}</p>
             <p>
                 ({{ post.content|wordcount }} words)
-                <a href="#">Read More</a>
+                <a class='card-link' href="{% url "blog-post-detail" post.slug %}">Read More</a>
             </p>
-        </div>
-    </div>
+              </div>
+          </div>
+        {% endcol%}
+    {% endrow %}
     {% endfor %}
 {% endblock %}
