@@ -13,8 +13,8 @@ import os
 from pathlib import Path
 from configurations import Configuration, values
 import dj_database_url
-class Dev(Configuration):
 
+class Dev(Configuration):
     # Build paths inside the project like this: BASE_DIR / 'subdir'.
     BASE_DIR = Path(__file__).resolve().parent.parent
 
