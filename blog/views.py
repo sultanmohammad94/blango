@@ -32,8 +32,26 @@ logger = logging.getLogger(__name__)
 #     logger.debug("Got %d posts", len(posts))
 #     return render(request, "blog/index.html", {"posts": posts})
 
+def get_ip(request):
+  from django.http import HttpResponse
+  return HttpResponse(request.META['REMOTE_ADDR'])
+  
 def index(request):
-    posts = Post.objects.filter(published_at__lte=timezone.now())
+    # posts = Post.objects.filter(published_at__lte=timezone.now())
+    # Optimization 1
+    # posts = Post.objects.filter(published_at__lte=timezone.now()).select_related('author')
+    # Optimization 2
+    # posts = (
+    #     Post.objects.filter(published_at__lte=timezone.now())
+    #     .select_related("author")
+    #     .defer("created_at", "modified_at")
+    # )
+    # Optimization 3
+    posts = (
+        Post.objects.filter(published_at__lte=timezone.now())
+        .select_related("author")
+        .only("title", "summary", "content", "author", "published_at", "slug")
+    )
     logger.debug("Got %d posts", len(posts))
     return render(request, "blog/index.html", {"posts": posts})
 
