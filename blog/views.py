@@ -6,8 +6,31 @@ from django.shortcuts import (
 from django.utils import timezone
 from blog.models import Post
 from blog.forms import CommentForm
+# caching imports:
+# ------------------------
+# from django.views.decorators.cache import cache_page
+# from django.views.decorators.vary import vary_on_headers, vary_on_cookie
+
 
 logger = logging.getLogger(__name__)
+
+'''Without vary_on_headers the index view will cause a big problem
+     because the logged in users and an anounymouseUser can share
+     same response.
+     Using vary_on_cookie is more convenient'''
+
+# caching code
+# ----------------------
+# @cache_page(300)
+# # @vary_on_headers('Cookie')
+# @vary_on_cookie
+# def index(request):
+#     from django.http import HttpResponse
+#     logger.debug("Index function is called!")
+#     return HttpResponse(str(request.user).encode("ascii"))
+#     posts = Post.objects.filter(published_at__lte=timezone.now())
+#     logger.debug("Got %d posts", len(posts))
+#     return render(request, "blog/index.html", {"posts": posts})
 
 def index(request):
     posts = Post.objects.filter(published_at__lte=timezone.now())
