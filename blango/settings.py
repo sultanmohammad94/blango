@@ -26,28 +26,6 @@ class Dev(Configuration):
 
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = True
-    # LOGGING = {
-    #     "version": 1,
-    #     "disable_existing_loggers": False,
-    #     "formatters": {
-    #         "verbose": {
-    #             "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
-    #             "style": "{",
-    #         },
-    #     },
-    #     "handlers": {
-    #         "console": {
-    #             "class": "logging.StreamHandler",
-    #             "stream": "ext://sys.stdout",
-    #             "formatter": "verbose",
-    #         },
-    #     },
-    #     "root": {
-    #         "handlers": ["console"],
-    #         "level": "DEBUG",
-    #     },
-    # }
-    # email ADMINS
     LOGGING = {
         "version": 1,
         "disable_existing_loggers": False,
@@ -119,6 +97,7 @@ class Dev(Configuration):
         'allauth.socialaccount',
         'allauth.socialaccount.providers.google',
         'rest_framework',
+        'rest_framework.authtoken',
     ]
 
     MIDDLEWARE = [
@@ -126,10 +105,8 @@ class Dev(Configuration):
         'django.middleware.security.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
         'django.middleware.common.CommonMiddleware',
-    #     'django.middleware.csrf.CsrfViewMiddleware',
         'django.contrib.auth.middleware.AuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
-    #     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     
     ]
     INTERNAL_IPS = ["192.168.11.179"]
@@ -161,7 +138,6 @@ class Dev(Configuration):
 
 
     # Database
-    # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
     DATABASES = {
         'default': {
@@ -172,7 +148,6 @@ class Dev(Configuration):
 
 
     # Password validation
-    # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
     AUTH_PASSWORD_VALIDATORS = [
         {
@@ -194,15 +169,19 @@ class Dev(Configuration):
       'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
       'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
     ]
-
+    REST_FRAMEWORK = {
+        "DEFAULT_AUTHENTICATION_CLASSES": [
+            "rest_framework.authentication.BasicAuthentication",
+            "rest_framework.authentication.SessionAuthentication",
+            "rest_framework.authentication.TokenAuthentication",
+        ]
+    }
     # Internationalization
-    # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
     LANGUAGE_CODE = 'en-us'
 
     # TIME_ZONE = 'UTC'
     TIME_ZONE = values.Value("UTC")
-    # TIME_ZONE = values.Value("UTC", environ_prefix="BLANGO")
 
     USE_I18N = True
 
@@ -212,13 +191,9 @@ class Dev(Configuration):
 
 
     # Static files (CSS, JavaScript, Images)
-    # https://docs.djangoproject.com/en/3.2/howto/static-files/
     CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
     CRISPY_TEMPLATE_PACK = "bootstrap5"
     STATIC_URL = '/static/'
-
-    # Default primary key field type
-    # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
     DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -228,12 +203,5 @@ class Prod(Dev):
   SECRET_KEY = values.SecretValue()
   DATABASES = values.DatabaseURLValue(f"sqlite:///{BASE_DIR}/db.sqlite3")
   
-  # DATABASES = {
-  #   "default": dj_database_url.config(default=f"sqlite:///{BASE_DIR}/db.sqlite3"),
-  #   "alternative": dj_database_url.config(
-  #       "ALTERNATIVE_DATABASE_URL",
-  #       default=f"sqlite:///{BASE_DIR}/alternative_db.sqlite3",
-  #   ),
-  # }
   
   
