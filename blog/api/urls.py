@@ -1,10 +1,17 @@
 import os
 from django.urls import path, include, re_path
+from rest_framework.routers import DefaultRouter
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.authtoken import views
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
-from blog.api.views import PostList, PostDetail, UserDetail
+from blog.api.views import (
+    UserDetail, TagViewSet, PostViewSet
+)
+
+router = DefaultRouter()
+router.register("tags", TagViewSet)
+router.register("posts", PostViewSet)
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -17,13 +24,12 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path("posts/", PostList.as_view(), name="api_post_list"),
-    path("posts/<int:pk>", PostDetail.as_view(), name="api_post_detail"),
     path("users/<str:email>", UserDetail.as_view(), name="api_user_detail"),
 
 ]
 urlpatterns += [
     path("auth/", include("rest_framework.urls")),
+    path("", include(router.urls)),
     path("token-auth/", views.obtain_auth_token),
     re_path(
         r"^swagger(?P<format>\.json|\.yaml)$",
