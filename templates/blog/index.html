@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load blog_extras %}
+{% load blog_extras  %}
 {% block content %}
     <h2 class="text-center text-warning display-2 mb-5 p-3 text-uppercase fw-bold">Blog Posts</h2>
 
@@ -8,9 +8,13 @@
         {% col 'p-2 bg-dark animate__animated animate__fadeInLeft'%}
           <div class="card p-3 bg-light text-dark border border-warning border-3">
             <h3 class="display-3 mb-2 card-title text-Dark fw-bold text-center">{{ post.title }}</h3>
+            {% comment %}
+              {% if post.hero_image %}
+                <img src="{{post.hero_image.url}}" alt="Hero image"/>
+              {% endif %}
+            {% endcomment %}
             <div class="text-center">
             {% include "blog/post-byline.html" %}
-        
               <p class='card-text text-center'>{{ post.summary }}</p>
             <p>
                 ({{ post.content|wordcount }} words)

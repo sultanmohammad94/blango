@@ -5,6 +5,15 @@
 {% row %}
     <div class="col">
         {% include "blog/post-byline.html" %}
+        {% row %}
+            {% if post.hero_image %}
+            {% row %}
+                {% col %}
+                    <img class="img-fluid" src="{{ post.hero_image.url }}">
+                {% endcol %}
+            {% endrow %}
+            {% endif %}
+        {% endrow %}
     </div>
 {% endrow %}
 {% row %}
