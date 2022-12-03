@@ -6,11 +6,6 @@ from django.shortcuts import (
 from django.utils import timezone
 from blog.models import Post
 from blog.forms import CommentForm
-# caching imports:
-# ------------------------
-# from django.views.decorators.cache import cache_page
-# from django.views.decorators.vary import vary_on_headers, vary_on_cookie
-
 
 logger = logging.getLogger(__name__)
 
@@ -19,34 +14,11 @@ logger = logging.getLogger(__name__)
      same response.
      Using vary_on_cookie is more convenient'''
 
-# caching code
-# ----------------------
-# @cache_page(300)
-# # @vary_on_headers('Cookie')
-# @vary_on_cookie
-# def index(request):
-#     from django.http import HttpResponse
-#     logger.debug("Index function is called!")
-#     return HttpResponse(str(request.user).encode("ascii"))
-#     posts = Post.objects.filter(published_at__lte=timezone.now())
-#     logger.debug("Got %d posts", len(posts))
-#     return render(request, "blog/index.html", {"posts": posts})
-
 def get_ip(request):
   from django.http import HttpResponse
   return HttpResponse(request.META['REMOTE_ADDR'])
   
 def index(request):
-    # posts = Post.objects.filter(published_at__lte=timezone.now())
-    # Optimization 1
-    # posts = Post.objects.filter(published_at__lte=timezone.now()).select_related('author')
-    # Optimization 2
-    # posts = (
-    #     Post.objects.filter(published_at__lte=timezone.now())
-    #     .select_related("author")
-    #     .defer("created_at", "modified_at")
-    # )
-    # Optimization 3
     posts = (
         Post.objects.filter(published_at__lte=timezone.now())
         .select_related("author")
@@ -74,3 +46,6 @@ def post_detail(request, slug):
     return render(
         request, "blog/post-detail.html", {"post": post, "comment_form": comment_form}
     )
+
+def post_table(request):
+    return render(request, "blog/post-table.html")

@@ -25,7 +25,7 @@ import blog.views
 import blango_auth.views
 urlpatterns = [
     path("", blog.views.index),
-    # path("accounts/", include("django.contrib.auth.urls")),
+    path("post-table/", blog.views.post_table, name="blog-post-table"),
     path(
         "accounts/register/",
         RegistrationView.as_view(form_class=BlangoRegistrationForm),
